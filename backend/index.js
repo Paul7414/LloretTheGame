@@ -56,3 +56,17 @@ app.get('/notifiche', async (req, res) => {
         res.status(500).send('Internal Server Error')
     }
 })
+
+app.get('/players/:id', async (req, res) => {
+    const playerId = req.params.id
+    try {
+        const player = await database.collection('players').findOne({ nome: playerId })
+        if (!player) {
+            return res.status(404).send('Player not found')
+        }
+        res.json(player)
+    } catch (error) {
+        console.error('Error fetching player:', error)
+        res.status(500).send('Internal Server Error')
+    }
+})
