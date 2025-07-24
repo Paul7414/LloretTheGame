@@ -1,0 +1,14 @@
+# File generici da ignorare
+node_modules/
+.env
+.DS_Store
+dist/
+*.log
+
+# Backend-specific (es. cartelle di build)
+backend/.env
+backend/node_modules/
+
+# Frontend-specific
+frontend/node_modules/
+frontend/.env
