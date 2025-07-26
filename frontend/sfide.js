@@ -52,7 +52,7 @@ function displayChallenges(challenges) {
                     <h3 class="font-semibold text-lg">${challenge.descrizione}</h3>
                     
                     <p class="mt-2 font-bold ${challenge.punti > 0 ? 'text-green-600' : 'text-red-600'}">
-                        Punti: ${challenge.punti > 0 ? '+' : ''}${challenge.punti}
+                        Aura: ${challenge.punti > 0 ? '+' : ''}${challenge.punti}
                     </p>
                 </div>
                 <button onclick="completeChallenge('${challenge._id}', ${challenge.punti})" 
