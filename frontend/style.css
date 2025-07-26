@@ -1,5 +1,5 @@
-/* Animazioni personalizzate */
-.player-card {
+/* Animazioni e stili comuni */
+.player-card, .challenge-card {
     transition: all 0.3s ease;
 }
 
@@ -13,7 +13,27 @@
     background-color: #eef2ff;
 }
 
-/* Nascondi lo spinner inizialmente */
+.challenge-card.positive {
+    border-left: 4px solid #10b981;
+}
+
+.challenge-card.negative {
+    border-left: 4px solid #ef4444;
+}
+
+.challenge-card.completed {
+    opacity: 0.6;
+}
+
 #loadingSpinner {
     display: none;
+}
+
+/* Stile per il pulsante di completamento */
+.complete-btn {
+    transition: all 0.2s ease;
+}
+
+.complete-btn:hover {
+    transform: scale(1.05);
 }

@@ -1,31 +1,17 @@
-// Configurazione
-const API_BASE_URL = 'http://localhost:3000'; // Puoi cambiare questa variabile dopo il deployment
-let selectedPlayerId = null;
-
-// Elementi del DOM
+const API_BASE_URL = 'http://localhost:3000';
 const playersContainer = document.getElementById('playersContainer');
 const loadingSpinner = document.getElementById('loadingSpinner');
 
-// Funzione per caricare i giocatori
 async function loadPlayers() {
     try {
-        // Mostra lo spinner di caricamento
         loadingSpinner.style.display = 'block';
         playersContainer.innerHTML = '';
         
-        // Fetch dei dati dal backend
         const response = await fetch(`${API_BASE_URL}/players`);
-        
-        if (!response.ok) {
-            throw new Error('Errore nel caricamento dei giocatori');
-        }
+        if (!response.ok) throw new Error('Errore nel caricamento dei giocatori');
         
         const players = await response.json();
-        
-        // Nascondi lo spinner
         loadingSpinner.style.display = 'none';
-        
-        // Mostra i giocatori
         displayPlayers(players);
     } catch (error) {
         console.error('Errore:', error);
@@ -39,12 +25,10 @@ async function loadPlayers() {
     }
 }
 
-// Funzione per visualizzare i giocatori
 function displayPlayers(players) {
     playersContainer.innerHTML = players.map(player => `
         <div class="player-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" 
-             data-id="${player._id}" 
-             onclick="selectPlayer('${player._id}')">
+             onclick="navigateToChallenges('${player._id}', '${player.nome}')">
             <div class="p-4">
                 <div class="flex items-center mb-4">
                     <img src="${player.foto}" alt="${player.nome}" 
@@ -61,37 +45,18 @@ function displayPlayers(players) {
             </div>
         </div>
     `).join('');
-    
-    // Se c'è un giocatore selezionato, evidenzialo
-    if (selectedPlayerId) {
-        const selectedCard = document.querySelector(`.player-card[data-id="${selectedPlayerId}"]`);
-        if (selectedCard) {
-            selectedCard.classList.add('selected');
-        }
-    }
 }
 
-// Funzione per selezionare un giocatore
-function selectPlayer(playerId) {
-    // Rimuovi la selezione precedente
-    const previouslySelected = document.querySelector('.player-card.selected');
-    if (previouslySelected) {
-        previouslySelected.classList.remove('selected');
-    }
-    
-    // Imposta il nuovo giocatore selezionato
-    selectedPlayerId = playerId;
-    
-    // Aggiungi la classe selected alla card cliccata
-    const selectedCard = document.querySelector(`.player-card[data-id="${playerId}"]`);
-    if (selectedCard) {
-        selectedCard.classList.add('selected');
-    }
-    
-    // Puoi fare qualcosa con l'ID del giocatore selezionato
-    console.log(`Giocatore selezionato: ${playerId}`);
-    // In futuro potrai usare questo ID per altre operazioni
+function navigateToChallenges(playerId, playerName) {
+    // Salva i dati del giocatore nel localStorage per la pagina sfide
+    localStorage.setItem('selectedPlayer', JSON.stringify({
+        id: playerId,
+        name: playerName
+    }));
+    window.location.href = 'sfide.html';
 }
 
-// Carica i giocatori quando la pagina è pronta
 document.addEventListener('DOMContentLoaded', loadPlayers);
+
+// Espone la funzione alla finestra globale
+window.navigateToChallenges = navigateToChallenges;

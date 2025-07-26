@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Sfide</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex items-center mb-8">
+            <button onclick="window.history.back()" class="mr-4 p-2 rounded-full bg-indigo-100 text-indigo-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </button>
+            <h1 class="text-3xl font-bold text-indigo-700" id="playerTitle">Sfide di </h1>
+        </div>
+        
+        <div class="flex justify-center mb-6">
+            <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-indigo-500" id="loadingSpinner"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 gap-4" id="challengesContainer">
+            <!-- Le sfide verranno inserite qui dinamicamente -->
+        </div>
+    </div>
+
+    <script src="sfide.js"></script>
+</body>
+</html>
