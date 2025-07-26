@@ -70,3 +70,42 @@ app.get('/players/:id', async (req, res) => {
         res.status(500).send('Internal Server Error')
     }
 })
+
+app.patch('/players/:id', async (req, res) => {
+    const playerId = req.params.id;
+    const { punti } = req.body;
+
+    if (typeof punti !== 'number') {
+        return res.status(400).json({ error: 'Il campo punti deve essere un numero' });
+    }
+
+    try {
+        // Prima troviamo il giocatore per ottenere il punteggio corrente
+        const player = await database.collection('players').findOne({ _id: new ObjectId(playerId) });
+        
+        if (!player) {
+            return res.status(404).json({ error: 'Giocatore non trovato' });
+        }
+
+        // Calcoliamo il nuovo punteggio
+        const nuovoPunteggio = player.punti + punti;
+
+        // Aggiorniamo il giocatore
+        const result = await database.collection('players').updateOne(
+            { _id: new ObjectId(playerId) },
+            { $set: { punti: nuovoPunteggio } }
+        );
+
+        if (result.modifiedCount === 0) {
+            return res.status(400).json({ error: 'Nessun aggiornamento effettuato' });
+        }
+
+        // Restituiamo il giocatore aggiornato
+        const updatedPlayer = await database.collection('players').findOne({ _id: new ObjectId(playerId) });
+        res.json(updatedPlayer);
+
+    } catch (error) {
+        console.error('Error updating player points:', error);
+        res.status(500).json({ error: 'Errore del server durante l\'aggiornamento' });
+    }
+});
