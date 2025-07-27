@@ -73,24 +73,17 @@ app.get('/players/:id', async (req, res) => {
 
 app.patch('/players/:id', async (req, res) => {
     const playerId = req.params.id;
-    const { punti } = req.body;
+    const { punti, motivo } = req.body;
 
     if (typeof punti !== 'number') {
         return res.status(400).json({ error: 'Il campo punti deve essere un numero' });
     }
 
     try {
-        // Prima troviamo il giocatore per ottenere il punteggio corrente
         const player = await database.collection('players').findOne({ _id: new ObjectId(playerId) });
-        
-        if (!player) {
-            return res.status(404).json({ error: 'Giocatore non trovato' });
-        }
+        if (!player) return res.status(404).json({ error: 'Giocatore non trovato' });
 
-        // Calcoliamo il nuovo punteggio
         const nuovoPunteggio = player.punti + punti;
-
-        // Aggiorniamo il giocatore
         const result = await database.collection('players').updateOne(
             { _id: new ObjectId(playerId) },
             { $set: { punti: nuovoPunteggio } }
@@ -100,12 +93,48 @@ app.patch('/players/:id', async (req, res) => {
             return res.status(400).json({ error: 'Nessun aggiornamento effettuato' });
         }
 
-        // Restituiamo il giocatore aggiornato
+        // Crea una notifica
+        await database.collection('notifiche').insertOne({
+            giocatoreId: playerId,
+            giocatoreNome: player.nome,
+            punti,
+            motivo: motivo || 'Assegnazione punti',
+            data: new Date()
+        });
+
         const updatedPlayer = await database.collection('players').findOne({ _id: new ObjectId(playerId) });
         res.json(updatedPlayer);
 
     } catch (error) {
         console.error('Error updating player points:', error);
-        res.status(500).json({ error: 'Errore del server durante l\'aggiornamento' });
+        res.status(500).json({ error: 'Errore del server' });
+    }
+});
+
+app.post('/notifiche', async (req, res) => {
+    const { giocatoreId, giocatoreNome, punti, motivo } = req.body;
+
+    if (!giocatoreId || !giocatoreNome || motivo === undefined) {
+        return res.status(400).json({ error: 'Campi mancanti' });
+    }
+
+    try {
+        const nuovaNotifica = {
+            giocatoreId,
+            giocatoreNome,
+            punti: Number(punti) || 0,
+            motivo,
+            data: new Date().toISOString()
+        };
+
+        const result = await database.collection('notifiche').insertOne(nuovaNotifica);
+        
+        res.status(201).json({
+            ...nuovaNotifica,
+            _id: result.insertedId
+        });
+    } catch (error) {
+        console.error('Error creating notification:', error);
+        res.status(500).json({ error: 'Errore del server' });
     }
 });

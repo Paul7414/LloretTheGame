@@ -5,6 +5,15 @@ const playerTitle = document.getElementById('playerTitle');
 
 let selectedPlayer = null;
 
+function escapeHtml(unsafe) {
+    if (!unsafe) return '';
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 async function initPage() {
     // Recupera i dati del giocatore dal localStorage
     const playerData = localStorage.getItem('selectedPlayer');
@@ -50,12 +59,11 @@ function displayChallenges(challenges) {
             <div class="flex justify-between items-center">
                 <div>
                     <h3 class="font-semibold text-lg">${challenge.descrizione}</h3>
-                    
                     <p class="mt-2 font-bold ${challenge.punti > 0 ? 'text-green-600' : 'text-red-600'}">
-                        Aura: ${challenge.punti > 0 ? '+' : ''}${challenge.punti}
+                        Punti: ${challenge.punti > 0 ? '+' : ''}${challenge.punti}
                     </p>
                 </div>
-                <button onclick="completeChallenge('${challenge._id}', ${challenge.punti})" 
+                <button onclick="completeChallenge('${challenge._id}', ${challenge.punti}, '${escapeHtml(challenge.descrizione)}')" 
                         class="complete-btn px-4 py-2 rounded-md 
                                ${challenge.punti > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
                     Completa
@@ -65,37 +73,39 @@ function displayChallenges(challenges) {
     `).join('');
 }
 
-async function completeChallenge(challengeId, points) {
+async function completeChallenge(challengeId, points, challengeName) {
     if (!selectedPlayer || !confirm(`Confermi di voler assegnare ${points} punti a ${selectedPlayer.name}?`)) {
         return;
     }
-    
+    console.log(challengeName)
     try {
-        // Aggiorna i punti del giocatore
         const updateResponse = await fetch(`${API_BASE_URL}/players/${selectedPlayer.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                punti: points // Questo verrà sommato al punteggio esistente nel backend
+                punti: points,
+                motivo: `Sfida completata: ${challengeName}`
             })
         });
         
         if (!updateResponse.ok) throw new Error('Errore nell\'aggiornamento dei punti');
         
         const updatedPlayer = await updateResponse.json();
-        
-        // Mostra feedback all'utente
         alert(`${selectedPlayer.name} ora ha ${updatedPlayer.punti} punti!`);
-        
-        // Ricarica le sfide
         await loadChallenges();
     } catch (error) {
         console.error('Errore:', error);
         alert(`Si è verificato un errore: ${error.message}`);
     }
 }
+
+// Aggiorna la chiamata nella mappa delle sfide
+// Da:
+// onclick="completeChallenge('${challenge._id}', ${challenge.punti})"
+// A:
+onclick="completeChallenge('${challenge._id}', ${challenge.punti}, '${escapeHtml(challenge.descrizione)}')"
 
 // Espone le funzioni alla finestra globale
 window.completeChallenge = completeChallenge;

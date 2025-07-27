@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifiche</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Intestazione con pulsante indietro -->
+        <div class="flex items-center justify-between mb-8">
+            <button onclick="window.history.back()" 
+                    class="flex items-center text-indigo-600 hover:text-indigo-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                </svg>
+                Indietro
+            </button>
+            <h1 class="text-2xl font-bold text-indigo-700">Storico Notifiche</h1>
+            <div class="w-5"></div> <!-- Spazio vuoto per bilanciare -->
+        </div>
+
+        <!-- Spinner di caricamento -->
+        <div class="flex justify-center mb-6">
+            <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-indigo-500" id="loadingSpinner"></div>
+        </div>
+
+        <!-- Container notifiche -->
+        <div class="space-y-4" id="notificationsContainer">
+            <!-- Le notifiche verranno caricate qui dinamicamente -->
+        </div>
+    </div>
+
+    <script src="notifiche.js"></script>
+</body>
+</html>
