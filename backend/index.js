@@ -86,9 +86,16 @@ app.patch('/players/:id', async (req, res) => {
         const nuovoPunteggio = player.punti + punti;
         const result = await database.collection('players').updateOne(
             { _id: new ObjectId(playerId) },
-            { $set: { punti: nuovoPunteggio } }
+            { $set: { punti: nuovoPunteggio } },
+            
         );
-
+        if(motivo === "Sfida completata: Scopata" || motivo === "Sfida completata: Limone"){
+            const ntipe = player.numeroTipe + 1;
+            const result2 = await database.collection('players').updateOne(
+                { _id: new ObjectId(playerId) },
+                { $set: { numeroTipe: ntipe } }
+            );
+        }
         if (result.modifiedCount === 0) {
             return res.status(400).json({ error: 'Nessun aggiornamento effettuato' });
         }
@@ -101,7 +108,7 @@ app.patch('/players/:id', async (req, res) => {
             motivo: motivo || 'Assegnazione punti',
             data: new Date()
         });
-
+    
         const updatedPlayer = await database.collection('players').findOne({ _id: new ObjectId(playerId) });
         res.json(updatedPlayer);
 
