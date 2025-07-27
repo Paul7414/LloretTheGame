@@ -37,3 +37,127 @@
 .complete-btn:hover {
     transform: scale(1.05);
 }
+
+/* Stili per il podio */
+.podium-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.podium-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: end;
+    justify-items: center;
+}
+
+.podium-place {
+    text-align: center;
+    position: relative;
+    width: 100%;
+}
+
+.podium-place.place-1 {
+    order: 2;
+    height: 220px;
+}
+
+.podium-place.place-2 {
+    order: 1;
+    height: 180px;
+}
+
+.podium-place.place-3 {
+    order: 3;
+    height: 160px;
+}
+
+.podium-rank {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4f46e5;
+    margin-bottom: 10px;
+}
+
+.podium-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 0 auto 10px;
+}
+
+.podium-place.place-1 .podium-avatar {
+    width: 100px;
+    height: 100px;
+    border: 4px solid #f59e0b;
+}
+
+.podium-place.place-2 .podium-avatar {
+    border: 3px solid #9ca3af;
+}
+
+.podium-place.place-3 .podium-avatar {
+    border: 3px solid #b45309;
+}
+
+.podium-info {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.podium-name {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.podium-nickname {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+}
+
+.podium-points {
+    color: #4f46e5;
+    font-weight: bold;
+}
+
+/* Responsive design per mobile */
+@media (max-width: 640px) {
+    .podium-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .podium-place {
+        height: auto !important;
+        margin-bottom: 20px;
+    }
+    
+    .podium-place.place-1 {
+        order: 1;
+    }
+    
+    .podium-place.place-2 {
+        order: 2;
+    }
+    
+    .podium-place.place-3 {
+        order: 3;
+    }
+    
+    .podium-avatar {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .podium-place.place-1 .podium-avatar {
+        width: 80px;
+        height: 80px;
+    }
+}
