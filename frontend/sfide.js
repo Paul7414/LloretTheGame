@@ -77,7 +77,6 @@ async function completeChallenge(challengeId, points, challengeName) {
     if (!selectedPlayer || !confirm(`Confermi di voler assegnare ${points} punti a ${selectedPlayer.name}?`)) {
         return;
     }
-    console.log(challengeName)
     try {
         const updateResponse = await fetch(`${API_BASE_URL}/players/${selectedPlayer.id}`, {
             method: 'PATCH',
