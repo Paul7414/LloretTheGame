@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'https://api-lloretthegame.onrender.com';
 const challengesContainer = document.getElementById('challengesContainer');
 const loadingSpinner = document.getElementById('loadingSpinner');
 const playerTitle = document.getElementById('playerTitle');
